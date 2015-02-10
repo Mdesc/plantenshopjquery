@@ -52,7 +52,9 @@ if(isset($_GET['page'])){
 			$tpl['body_id'] 			= "shop";					
 			//content
 			$tpl['rechts'] 				= getPlanten($soort_id, $kleur, $hoogte_min, $hoogte_max);
-			
+			$tpl['paginaScripts'] = getScriptElements(array("js/vendor/jquery/Datatables-1.10.4/media/js/jquery.dataTables.min.js", "js/shop.js"));
+                        $tpl['paginaStylesheets'] = getLinkElements("js/vendor/jquery/Datatables-1.10.4/media/css/jquery.dataTables.css");
+                        
 			break;
 		
 		case "zorg":
@@ -61,7 +63,8 @@ if(isset($_GET['page'])){
 			$tpl['body_id'] 			= "zorg";					
 			//content
 			$tpl['rechts'] 				= getVerzorging();
-			
+			$tpl['paginaScripts'] = getScriptElements("js/zorg.js");
+                        
 			break;		
 		
 		case "galerij":
@@ -71,6 +74,8 @@ if(isset($_GET['page'])){
 			//content
 			$tpl['rechts'] 				= getGalerij();
 			
+                        $tpl['paginaScripts'] = getScriptElements(array("js/vendor/jquery/lightbox/js/lightbox.js"));
+                        $tpl['paginaStylesheets'] = getLinkElements("js/vendor/jquery/lightbox/css/lightbox.css");
 			
 
 			break;
@@ -82,7 +87,7 @@ if(isset($_GET['page'])){
 			$tpl['body_id'] 			= "registreer";					
 			//content
 			$tpl['rechts'] 				= getRegistreer();
-			
+			$tpl['paginaScripts'] = getScriptElements(array("js/vendor/jquery/jquery-validation/dist/jquery.validate.min.js", "js/registreer.js"));
 			break;		
 		
 		default:
@@ -97,7 +102,7 @@ else {
 		$tpl['body_id'] 				= "home";	
 		//content
 		$tpl['rechts'] 					= getHome();
-		
+		$tpl['paginaScripts'] = getScriptElements("js/home.js");
 }
 
 

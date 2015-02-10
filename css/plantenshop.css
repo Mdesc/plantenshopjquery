@@ -239,7 +239,11 @@ table.cursus td,table.cursus th
 #keuzes h3:nth-of-type(6){background-color:#1DB8EF;}/*cerulean*/
 #keuzes h3:nth-of-type(7){background-color:#DDDF1B;}/*olijf*/
 
-
+#keuzes .ui-accordion-header, #keuzes .ui-accordion-content{
+    background-image:none;
+    border:none;
+    border-radius:0;
+}
 /************footer content****************************/
 footer li {
 	border-right:1px solid #C2B2B5;

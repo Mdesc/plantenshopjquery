@@ -311,14 +311,14 @@ function getPlanten($soort_id, $kleur, $hoogte_min, $hoogte_max){
     
 	//adv zoeken
 		$str .= "<!--start geavanceerd zoeken -->
-				<div id='adv_zoeken' style='display:none' >"; // 
+				<div id='adv_zoeken' >"; // 
 		
 		$str .= "<div><label for='kleur'>kleur: </label>". $kleuren_dd . "</div>";
 		$str .= "<div>
 					<label for='hoogte'>hoogte tussen: </label>
 					<div class='controlbox vert'>
-					<input type='text' id='hoogte_min' name='hoogte_min' size='4' class='kort' value='0'  /> en
-					<input type='text' id='hoogte_max' name='hoogte_max' size='4' class='kort' value='5000' />
+					<input type='text' id='hoogte_min' name='hoogte_min' size='4' class='kort'   /> en
+					<input type='text' id='hoogte_max' name='hoogte_max' size='4' class='kort'  />
 					</div>
 					</div>";
 						
@@ -327,7 +327,7 @@ function getPlanten($soort_id, $kleur, $hoogte_min, $hoogte_max){
 					<div class='controlbox vert'>
 
 					<!--start slider -->
-					
+					<div id='slider-range-hoogte' class='slider'></div>
 					<!--einde slider -->
 					
 					</div>
@@ -370,7 +370,9 @@ function getRegistreer(){
   				</section>";
 		
   		$str .= "<section>
-		
+                                  <!--start foutBox -->
+                                  <div class='foutBox' id='fouten'><h2>Fouten</h2><ul></ul></div>
+                                  <!--einde foutBox -->
 				  <form id='regForm' name='regForm' method='get' action='reflect_data.php'>
 					<fieldset>
 					  <legend>Uw persoonlijke gegevens</legend>
@@ -384,7 +386,7 @@ function getRegistreer(){
 					  </div>
 					  <div>
 						<label for='straat'>Straat:</label>
-						<input type='text' title='uw straat  met huisnummer'  placeholder='straat + huisnummer'  id='straat' name='straat'  />
+						<input type='text' title='uw straat  met huisnummer'  placeholder='straat + huisnummer'  id='straat' name='straat' required />
 					  </div>
 					  <div>
 						<label for='gemeente'>Gemeente:</label>
@@ -404,12 +406,14 @@ function getRegistreer(){
 					  </div>
 					  <div>
 						<label>geslacht<abbr class='verplicht' title='verplicht'>*</abbr>:</label>
+                                                <div class='controlbox'>
 						<label class='labelRadio' for='man'>
 						  <input type='radio'  title='uw sexe' id='man'  name='sexe' value='m' />
 						  Man </label>
 						<label class='labelRadio' for='vrouw' >
 						  <input type='radio' title='uw sexe' id='vrouw' name='sexe' value='v' />
 						  Vrouw </label>
+                                                  </div>
 					  </div>
 					</fieldset>";
 					
@@ -443,7 +447,9 @@ function getRegistreer(){
 					  <legend>Aanmelding</legend>
 					  <div>
 						<label for='username'>gebruikersnaam<abbr class='verplicht' title='verplicht'>*</abbr>:
-						
+						<!--start dialogbutton-->
+                                                <br><a href='#' id='dialog_link_username'>Meer uitleg</a>
+                                                <!--einde dialogbutton -->
 						</label>
 						<input type='text' title='de gebruikersnaam waarmee u wil aanmelden'   id='username' name='username'  />
 					  </div>
@@ -474,8 +480,11 @@ function getRegistreer(){
 					  </div>
 					</fieldset>
 				  </form>
+                                  <!--start foutBox-->
+                                  <div class='foutBox'><a href='#fouten'>sommige ingevulde gegevens zijn foutief!</a></div>
+                                  <!--einde foutBox-->
 				  ";
-		
+                        $str .= getUsernameDialog();
 		
 	return $str; 
 }
@@ -490,9 +499,20 @@ function getVerzorging(){
 				</section>";
 				
   		$str .= "<section>
-				
+				<p><label><input type='checkbox' id='toonWaterplanten' /> info inclusief waterplanten</label></p>
+                                
+                                <p>Soms is goede verzorging onvoldoende: een aantal ziektes belagen onze tuinplanten.<a href='#' id='toonZiektes'> Meer weten over ziektes?</a></p>
+                                
 				<!--start div verzorging-->
 				<div id='verzorging'>
+                                <!—start UL toegevoegd voor tabs-->
+                                <ul>
+                                <li><a href='#bodem'>Bodem en voedsel</a></li>
+                                <li><a href='#vermeerderen'>Vermeerderen</a></li>
+                                <li><a href='#licht'>zon of schaduw</a></li>
+                                <li><a href='#waterplanten'>waterplanten</a></li>
+                                </ul>
+                                <!--einde UL toegevoegd voor tabs-->
 				<div id='bodem'>
 				<h3>Zorg voor een vochtige wortelkluit</h3>
 				<p> Vaste planten worden tegenwoordig afgeleverd in potten. Ze zien er misschien niet altijd even florissant uit, maar de kans dat de planten in de tuin onmiddellijk doorgroeien is bijna 100%. Een ander voordeel is dat in feite het hele jaar door geplant kan worden. Maar de voorkeur van de vakman gaat uit naar planten in het najaar. De ervaring leert echter, dat tuinliefhebbers vrijwel steeds het nieuwe groeiseizoen afwachten en dus gaan planten in april en mei.</p>
@@ -554,75 +574,75 @@ function getGalerij(){
 		$str .= "
 		<div id='thumblist'>
 		<figure id='fig1'>
-		<a href='images/planten/lupine.jpg'  title='Kenai Peninsula Lupine, prachtige lentebloeier'>
+		<a href='images/planten/lupine.jpg' rel='lightbox[planten]'  title='Kenai Peninsula Lupine, prachtige lentebloeier'>
     	<img src='images/planten/th_lupine.jpg' /></a>
     	<figcaption><b>Kenai Peninsula Lupine</b><br> prachtige lentebloeier</figcaption></figure>
     	<figure id='fig2'>
-		<a href='images/planten/koningsvaren.jpg'  title='Koningsvaren, Prachtige varen voor halfschaduw. Verlangt een vochtige bodem'>
+		<a href='images/planten/koningsvaren.jpg' rel='lightbox[planten]'  title='Koningsvaren, Prachtige varen voor halfschaduw. Verlangt een vochtige bodem'>
     	<img src='images/planten/th_koningsvaren.jpg' /></a>
     	<figcaption><b>Koningsvaren</b><br>Prachtige varen voor halfschaduw. Verlangt een vochtige bodem</figcaption>	
     	</figure>
 		<figure id='fig3'>
-		<a href='images/planten/geranium_psilostemon.jpg'  title='Geranium psilostemon,  Oersterke vaste plant, kleur de hele zomer lang'>
+		<a href='images/planten/geranium_psilostemon.jpg' rel='lightbox[planten]'  title='Geranium psilostemon,  Oersterke vaste plant, kleur de hele zomer lang'>
     	<img src='images/planten/th_geranium_psilostemon.jpg' /></a>	
     	<figcaption><b>Geranium psilostemon</b><br> Oersterke vaste plant, kleur de hele zomer lang</figcaption>
 		</figure>
 		<figure id='fig4'>
-		<a href='images/planten/verbena.jpg'  title='Verbena, Prachtige paarse bloem. small hoge plant ideaal als opvulling tussen lage planten. Zon vereist.'>
+		<a href='images/planten/verbena.jpg' rel='lightbox[planten]'  title='Verbena, Prachtige paarse bloem. small hoge plant ideaal als opvulling tussen lage planten. Zon vereist.'>
     	<img src='images/planten/th_verbena.jpg' /></a>
     	<figcaption><b>Verbena</b><br> Prachtige paarse bloem. small hoge plant ideaal als opvulling tussen lage planten. Zon vereist.</figcaption>
     	</figure>
 		<figure id='fig5'>
-		<a href='images/planten/tricyrtis.jpg'  title='Tricyrtis, Vele mensen hebben er succes mee iop een zonnige plek. Niet te droog'>
+		<a href='images/planten/tricyrtis.jpg' rel='lightbox[planten]'  title='Tricyrtis, Vele mensen hebben er succes mee iop een zonnige plek. Niet te droog'>
     	<img src='images/planten/th_tricyrtis.jpg' /></a>	
     	<figcaption><b>Tricyrtis</b><br> Arme-mensen orchidee. Vele mensen hebben er succes mee iop een zonnige plek. Niet te droog</figcaption></figure>
 		<figure id='fig6'>
-		<a href='images/planten/salvia_patens.jpg'  title='Salvia patens, Welke andere plant kan dit blauw evenaren? enkel indien ze heel goed beschermd zijn, zijn ze overblijvend.'>
+		<a href='images/planten/salvia_patens.jpg' rel='lightbox[planten]'  title='Salvia patens, Welke andere plant kan dit blauw evenaren? enkel indien ze heel goed beschermd zijn, zijn ze overblijvend.'>
     	<img src='images/planten/th_salvia_patens.jpg' /></a>	
 		<figcaption><b>Salvia patens</b><br>Welke andere plant kan dit blauw evenaren? enkel indien ze heel goed beschermd zijn, zijn ze overblijvend.</figcaption>
     	</figure>
 		<figure id='fig7'>
-		<a href='images/planten/salvia_involucrata.jpg'  title='Salvia involucrata, Roze salvia'>
+		<a href='images/planten/salvia_involucrata.jpg' rel='lightbox[planten]'  title='Salvia involucrata, Roze salvia'>
     	<img src='images/planten/th_salvia_involucrata.jpg' /></a>
 		<figcaption><b>Salvia involucrata</b><br> Roze salvia</figcaption>	
     	</figure>
 		<figure id='fig8'>
-		<a href='images/planten/salvia_fulgens.jpg'  title='Salvia fulgens, Superrode bloemen. bosrandplant, geef voldoende humus.'>
+		<a href='images/planten/salvia_fulgens.jpg' rel='lightbox[planten]'  title='Salvia fulgens, Superrode bloemen. bosrandplant, geef voldoende humus.'>
     	<img src='images/planten/th_salvia_fulgens.jpg' /></a>	
 		<figcaption><b>Salvia fulgens</b><br>Superrode bloemen. bosrandplant, geef voldoende humus.</figcaption>
     	</figure>
 		<figure id='fig9'>
-		<a href='images/planten/lelies.jpg'  title='Lelies zijn een klassieker in de tuin, ze brengen spektakel en structuur. Goede verzorging is nodig'>
+		<a href='images/planten/lelies.jpg' rel='lightbox[planten]'  title='Lelies zijn een klassieker in de tuin, ze brengen spektakel en structuur. Goede verzorging is nodig'>
     	<img src='images/planten/th_lelies.jpg' /></a>	
 		<figcaption><b>Lelies</b><br>Lelies zijn een klassieker in de tuin, ze brengen spektakel en structuur. Goede verzorging is nodig</figcaption>	
     	</figure>
 		<figure id='fig10'>
-		<a href='images/planten/holodiscus.jpg'  title='Holodiscus of Pluimspirea, Ideaal te combineren met vaste planten'>
+		<a href='images/planten/holodiscus.jpg' rel='lightbox[planten]'  title='Holodiscus of Pluimspirea, Ideaal te combineren met vaste planten'>
     	<img src='images/planten/th_holodiscus.jpg' /></a>	
 		<figcaption><b>Holodiscus of Pluimspirea</b><br>Ideaal te combineren met vaste planten</figcaption>
     	</figure>
 		<figure id='fig11'>
-		<a href='images/planten/helleborus_orientalis.jpg'  title='Helleborus orientalis, Bosrandplant. Degelijke wintergroene planten. Voor een mooi kleurrijk effect in de wintertuin.'>
+		<a href='images/planten/helleborus_orientalis.jpg' rel='lightbox[planten]'  title='Helleborus orientalis, Bosrandplant. Degelijke wintergroene planten. Voor een mooi kleurrijk effect in de wintertuin.'>
 		<img src='images/planten/th_helleborus_orientalis.jpg' /></a>
 		<figcaption><b>Helleborus orientalis</b><br>Bosrandplant. Degelijke wintergroene planten. Voor een mooi kleurrijk effect in de wintertuin.</figcaption>
     	</figure>
 		<figure id='fig12'>
-		<a href='images/planten/erica_arborea.jpg'  title='Erica arborea of Boomheide, De grootste heide-soort. In de heide- en veentuin. In wisselende beplanting in bakken.'>
+		<a href='images/planten/erica_arborea.jpg' rel='lightbox[planten]'  title='Erica arborea of Boomheide, De grootste heide-soort. In de heide- en veentuin. In wisselende beplanting in bakken.'>
     	<img src='images/planten/th_erica_arborea.jpg' /></a>
 		<figcaption><b>Erica arborea of Boomheide</b><br>De grootste heide-soort. In de heide- en veentuin. In wisselende beplanting in bakken.</figcaption>		
     	</figure>
 		<figure id='fig13'>
-		<a href='images/planten/cornus_cousa.jpg'  title='Cornus cousa, Witte kormoelje. Schaduwplant voor de vroege zomer'>
+		<a href='images/planten/cornus_cousa.jpg' rel='lightbox[planten]'  title='Cornus cousa, Witte kormoelje. Schaduwplant voor de vroege zomer'>
     	<img src='images/planten/th_cornus_cousa.jpg' /></a>
 		<figcaption><b>Cornus cousa</b><br>Witte kormoelje. Schaduwplant voor de vroege zomer</figcaption>	
     	</figure>
 		<figure id='fig14'>
-		<a href='images/planten/althea.jpg'  title='Althea, De klassieke grote Hibiscus: verlangt volle zon en een goed doorlatende grond'>
+		<a href='images/planten/althea.jpg' rel='lightbox[planten]'  title='Althea, De klassieke grote Hibiscus: verlangt volle zon en een goed doorlatende grond'>
     	<img src='images/planten/th_althea.jpg' /></a>
 		<figcaption><b>Althea</b><br>De klassieke grote Hibiscus: verlangt volle zon en een goed doorlatende grond</figcaption>
     	</figure>
 		<figure id='fig15'>
-		<a href='images/planten/kniphofia.jpg'  title='Kniphofia Vuurbal, De mooiste kniphofiasoort'>
+		<a href='images/planten/kniphofia.jpg' rel='lightbox[planten]'  title='Kniphofia Vuurbal, De mooiste kniphofiasoort'>
     	<img src='images/planten/th_kniphofia.jpg' /></a>
 		<figcaption><b>Kniphofia 'Vuurbal'</b><br>De mooiste kniphofiasoort</figcaption>
     	</figure>
