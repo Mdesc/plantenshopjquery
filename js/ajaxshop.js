@@ -36,8 +36,43 @@ $(function(){
     $("#hoogte_min").val($("#slider-range-hoogte").slider("values", 0));
     $("#hoogte_max").val($("#slider-range-hoogte").slider("values", 1));
 
+    /*******************event handlers**********************************************/
+    $("#kleur, #soort_id").change(function(){
+        herlaadTabel();
+    })
+    function herlaadTabel(){
+        //ajaxcall vr nieuwe gegevens vanuit sAjaxSource
+        oTable.fnReloadAjax();
+    }
+    
+    //min max hoogte slider
+    $("#slider-range-hoogte").slider({
+        range : true,
+        values : [0, 5000],
+        min : 0,
+        max : 5000,
+        step : 10,
+        slide : function(event, ui) {
+            $("#hoogte_min").val($(this).slider("values", 0));
+            $("#hoogte_max").val($(this).slider("values", 1));
+            herlaadTabel();
+        },
+        stop: function(event, ui) {
+            $("#hoogte_min").val($(this).slider("values", 0));
+            $("#hoogte_max").val($(this).slider("values", 1));
+            herlaadTabel();
+        }
+    });
+
     //datatables
-    $("#plantenlijst").dataTable({     
+    var oTable = $("#plantenlijst").dataTable({    
+        "sAjaxSource": "services/ajax_json_dt_planten.php",
+        "fnServerData": function (sSource, aoData, fnCallback ) {
+            $.getJSON( 
+            sSource,
+            $('form').serializeArray(),
+            function (json){fnCallback(json) });
+        },
         "bPaginate": true,
         "bSort":true,
         "iDisplayLength": 20,
@@ -45,14 +80,14 @@ $(function(){
         "sPaginationType": "full_numbers",
         "aLengthMenu": [[20, 25, 50, -1], [20, 25, 50, "Alle records"]],
         "bProcessing": true,
-        "aaSorting": [[6,'asc'], [2,'desc']],
+        //"aaSorting": [[6,'asc'], [2,'desc']],
         "aoColumnDefs": [
-        { "bVisible": true, "aTargets": [ 5 ] },
-        { "bSortable": false, "aTargets": [ 2, 6 ] },
+        { "bVisible": false, "aTargets": [ 0,6 ] },
+        { "bSortable": false, "aTargets": [ 3, 7 ] },
         { "asSorting": [ "desc" ], "aTargets": [ 3 ] },
-        { "bSearchable": false, "sTitle": "Rubriek", "aTargets": [ 6 ] },
-        { "sTitle": "Lengte", "sWidth": "5%", "aTargets": [ 2 ] },
-        { "sClass": "dt_fluo", "aTargets": [ 0 ] }
+        { "bSearchable": false, "sTitle": "Rubriek", "aTargets": [ 7 ] },
+        { "sTitle": "Lengte", "sWidth": "5%", "aTargets": [ 3 ] },
+        { "sClass": "dt_fluo", "aTargets": [ 1 ] }
         ],
         "oLanguage":{"sUrl": "js/vendor/jquery/Datatables-1.10.4/media/js/datatables.nederlands.txt"}
     });

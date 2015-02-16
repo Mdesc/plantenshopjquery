@@ -27,10 +27,15 @@ $(function(){
         var $diefrechts = $('<div id="teamgegevens">');
         var $keuzelijst = $('<select id="teamkeuzelijst">');
         var strDeOptions = '<option value="">--- het team ---</option>';
+        /*
         $.each(lijst, function(n, value){
         strDeOptions += '<option>' + value + '</option>';
         })
         $keuzelijst.html(strDeOptions);
+     */
+        //met custom wrapper method
+        $keuzelijst.vulSelect(lijst, "-- kies een teamlid --");
+    
         $container.append($keuzelijst).prepend($diefrechts);
         $('#team').after($container);
 
@@ -39,6 +44,28 @@ $(function(){
     var $list = $('<ol>');
     $('#toc').empty().append(walkTree(root,$list,enterNode,exitNode));
     
+    //************** AJAX call nr JSON gegevens team ************************//
+    $('#teamkeuzelijst').change(function(){
+        var waarde = $(this).val();
+        //console.log(waarde + ' gekozen');
+        $.getJSON(
+            'services/ajax_json_team.php',
+            {teamlid:waarde},
+            function(jeeson){
+                var strHTML = "";
+                if(jeeson.naam){
+                    strHTML += "<img src='images/" + jeeson.foto + "' />";
+                    strHTML += "<h3>" + jeeson.naam + "</h3>";
+                    strHTML += "<p>leeftijd: " + jeeson.leeftijd + "</p>";
+                    strHTML += "<p>functie: " + jeeson.functie + "</p>";
+                }
+                $('#teamgegevens').html(strHTML);
+            }
+        )//einde getJSON
+    })
+    
+    $.zegDankUTegen('Jonas');
+    $('<li>').html($.vandaag()).prependTo('footer ul').wordtGroen();
 }); //einde doc ready
 
 var lijst = ['roger', 'evelyn','hilde','jan'];
