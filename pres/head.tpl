@@ -24,7 +24,7 @@
 <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 <script src="js/vendor/jquery/js/jquery-1.10.2.js"></script>
 <script src="js/vendor/jquery/js/jquery-ui-1.10.4.custom.min.js"></script>
-
+<script src="js/vendor/jquery/js/jquery.mathias.utils.js"></script>
 <!-- pagina-gebonden JS scripts-->
 {$paginaScripts}
 
